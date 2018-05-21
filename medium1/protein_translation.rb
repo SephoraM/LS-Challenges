@@ -7,11 +7,11 @@ class Translation
                           Tryptophan: %w[UGG], STOP: %w[UAA UAG UGA] }.freeze
 
   def self.of_codon(codon)
-    raise InvalidCodonError, 'Invalid codon!' unless valid?(codon)
-
     PROTEINS_AND_CODONS.each do |protein, codons|
       return protein.to_s if codons.include?(codon)
     end
+
+    raise InvalidCodonError, 'Invalid codon!'
   end
 
   def self.of_rna(strand)
@@ -19,10 +19,6 @@ class Translation
       return protein_strand if stop?(codon)
       protein_strand << of_codon(codon)
     end
-  end
-
-  def self.valid?(codon)
-    PROTEINS_AND_CODONS.values.flatten.include?(codon)
   end
 
   def self.stop?(codon)
